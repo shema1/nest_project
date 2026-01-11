@@ -28,17 +28,29 @@ export class SensorsService {
   async findAll(
     query: GetSensorDataQueryDto,
   ): Promise<PaginatedSensorData> {
-    const { page = 1, limit = 10 } = query;
+    const { page = 1, limit = 10, startDate, endDate } = query;
     const skip = (page - 1) * limit;
+
+    // Build filter for date range
+    const filter: any = {};
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) {
+        filter.createdAt.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        filter.createdAt.$lte = new Date(endDate);
+      }
+    }
 
     const [data, total] = await Promise.all([
       this.sensorDataModel
-        .find()
+        .find(filter)
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .exec(),
-      this.sensorDataModel.countDocuments().exec(),
+      this.sensorDataModel.countDocuments(filter).exec(),
     ]);
 
     const totalPages = Math.ceil(total / limit);
