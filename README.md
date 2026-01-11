@@ -31,6 +31,32 @@
 $ yarn install
 ```
 
+## MongoDB Atlas Configuration
+
+This project is configured to connect to MongoDB Atlas. To set up the connection:
+
+1. Create a `.env` file in the root directory
+2. Add your MongoDB Atlas connection string:
+
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database_name?retryWrites=true&w=majority
+PORT=3000
+```
+
+Replace `username`, `password`, `cluster`, and `database_name` with your actual MongoDB Atlas credentials.
+
+The connection is automatically established when the application starts.
+
+## API Documentation (Swagger)
+
+This project includes Swagger/OpenAPI documentation. After starting the application, you can access the interactive API documentation at:
+
+```
+http://localhost:3000/api
+```
+
+The Swagger UI provides a complete interface to explore and test all available API endpoints.
+
 ## Compile and run the project
 
 ```bash
