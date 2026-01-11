@@ -21,7 +21,12 @@ export class SensorsService {
   ) {}
 
   async create(createSensorDataDto: CreateSensorDataDto): Promise<SensorData> {
-    const createdData = new this.sensorDataModel(createSensorDataDto);
+    const roundedData = {
+      ...createSensorDataDto,
+      temperature: Math.round(createSensorDataDto.temperature * 10) / 10,
+      humidity: Math.round(createSensorDataDto.humidity * 10) / 10,
+    };
+    const createdData = new this.sensorDataModel(roundedData);
     return createdData.save();
   }
 
