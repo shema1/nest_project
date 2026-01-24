@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Query, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Body, Query, HttpCode, HttpStatus, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { SensorsService } from './sensors.service';
 import { CreateSensorDataDto } from './dto/create-sensor-data.dto';
@@ -7,6 +7,8 @@ import { GetSensorDataQueryDto } from './dto/get-sensor-data-query.dto';
 @ApiTags('sensors')
 @Controller('sensors')
 export class SensorsController {
+  private readonly logger = new Logger(SensorsController.name);
+
   constructor(private readonly sensorsService: SensorsService) {}
 
   @Post()
@@ -29,6 +31,18 @@ export class SensorsController {
   })
   async findAll(@Query() query: GetSensorDataQueryDto) {
     return this.sensorsService.findAll(query);
+  }
+
+  @Post('test')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Test endpoint' })
+  @ApiResponse({
+    status: 200,
+    description: 'Test endpoint response.',
+  })
+  async test(@Body() body: Record<string, unknown>) {
+    this.logger.log(`Test payload: ${JSON.stringify(body)}`);
+    return { message: 'Test endpoint response.', body };
   }
 }
 
